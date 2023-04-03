@@ -54,9 +54,6 @@ async function run({ owner, repo, token, maxRetries, retryInterval }) {
                     job_id: check.getIn(["details_url"]).split("/")[9],
                   })
                 );
-
-              //pretty print failed checks
-              // console.log(failedChecks.toJS());
               return failedChecks;
             })
             .then((failedChecks) => {
@@ -81,7 +78,6 @@ async function run({ owner, repo, token, maxRetries, retryInterval }) {
                       rerun_url: run.getIn(["data", "rerun_url"]),
                       run_id: run.getIn(["data", "id"]),
                     });
-                    // console.log(candidates.toJS());
                     return candidates;
                   });
               });
@@ -91,8 +87,6 @@ async function run({ owner, repo, token, maxRetries, retryInterval }) {
             .then((runDetails) => {
               return Promise.all(
                 runDetails.map((run) => {
-                  // use octokit to call rerun_url
-                  console.log("run", run.toJS());
                   return octokit.actions.reRunWorkflowFailedJobs({
                     owner,
                     repo,
@@ -101,10 +95,10 @@ async function run({ owner, repo, token, maxRetries, retryInterval }) {
                 })
               );
             })
-            .then((data) => {
-              data.map((run) => {
-                console.log("rerun", run.toJS());
-              });
+            //output list of rerun jobs
+            .then((rerunJobs) => {
+              core.setOutput("rerunJobs", rerunJobs);
+              core.setOutput("rerunJobsCount", rerunJobs.length);
             })
             .catch((error) => {
               // handle error
@@ -116,7 +110,6 @@ async function run({ owner, repo, token, maxRetries, retryInterval }) {
     core.setFailed(error.message);
   }
 }
-
 run({
   owner: core.getInput("owner"),
   repo: core.getInput("repo"),
