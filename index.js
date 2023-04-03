@@ -9,7 +9,7 @@ async function run({ owner, repo, token, maxRetries, retryInterval }) {
   try {
     // Set the time range to retrieve failed checks for (last 24 hours)
     const now = new Date();
-    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000 * 30);
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     const since = yesterday.toISOString();
 
     // Create a new Octokit instance with an authentication token (if needed)
