@@ -1,116 +1,36 @@
-# Create a JavaScript Action
+# GitHub Action to Retry Failed PR Checks
+This is a GitHub Action that retrieves the failed checks for open pull requests in a given repository and automatically retries them up to a specified number of times.
 
-<p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
-</p>
-
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
-
-This template includes tests, linting, a validation workflow, publishing, and versioning guidance.
-
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-Install the dependencies
-
-```bash
-npm install
-```
-
-Run the tests :heavy_check_mark:
-
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-const core = require('@actions/core');
-...
-
-async function run() {
-  try {
-      ...
-  }
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Package for distribution
-
-GitHub Actions will run the entry point from the action.yml. Packaging assembles the code into one file that can be checked in to Git, enabling fast and reliable execution and preventing the need to check in node_modules.
-
-Actions are run from GitHub repos.  Packaging the action will create a packaged action in the dist folder.
-
-Run prepare
-
-```bash
-npm run prepare
-```
-
-Since the packaged index.js is run from the dist folder.
-
-```bash
-git add dist
-```
-
-## Create a release branch
-
-Users shouldn't consume the action from master since that would be latest code and actions can break compatibility between major versions.
-
-Checkin to the v1 release branch
-
-```bash
-git checkout -b v1
-git commit -a -m "v1 release"
-```
-
-```bash
-git push origin v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket:
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
+## Inputs
+owner (required): The owner of the repository.
+repo (required): The name of the repository.
+token (required): A personal access token with permissions to access the repository.
+maxRetries (optional): The maximum number of times to retry failed checks. Default is 3.
+retryInterval (optional): The number of seconds to wait before retrying failed checks. Default is 60.
+Outputs
+rerunJobs: A list of the rerun jobs.
+rerunJobsCount: The number of rerun jobs.
 
 ## Usage
-
-You can now consume the action by referencing the v1 branch
-
-```yaml
-uses: actions/javascript-action@v1
-with:
-  milliseconds: 1000
+```
+- name: Retry Failed PR Checks
+  uses: my-org/retry-failed-pr-checks-action@v1
+  with:
+    owner: my-org
+    repo: my-repo
+    token: ${{ secrets.GITHUB_TOKEN }}
+    maxRetries: 5
 ```
 
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
+This Action retrieves the failed checks for all open pull requests in the specified repository and retries them unless they have been retried 5 or more times.
+
+## Additional Notes
+This Action uses the following Node.js packages:
+
+@actions/core: A toolkit for writing actions in Node.js.
+@actions/github: A toolkit for interacting with the GitHub API.
+@octokit/rest: A REST API client for GitHub.
+immutable: A library for creating immutable data structures.
+moment: A library for working with dates and times.
+
+To use this Action, you will need to create a personal access token with permissions to access the repository. You can create a new personal access token in your GitHub account settings. Be sure to keep your personal access token secret by storing it in a GitHub secret and using the ${{ secrets.GITHUB_TOKEN }} syntax to access it in your workflow.
