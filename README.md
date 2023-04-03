@@ -2,13 +2,17 @@
 This is a GitHub Action that retrieves the failed checks for open pull requests in a given repository and automatically retries them up to a specified number of times.
 
 ## Inputs
-owner (required): The owner of the repository.
-repo (required): The name of the repository.
-token (required): A personal access token with permissions to access the repository.
-maxRetries (optional): The maximum number of times to retry failed checks. Default is 3.
-retryInterval (optional): The number of seconds to wait before retrying failed checks. Default is 60.
+*owner* (required): The owner of the repository.
+
+*repo* (required): The name of the repository.
+
+*token* (required): A personal access token with permissions to access the repository.
+
+*maxRetries* (optional): The maximum number of times to retry failed checks. Default is 3.
+
 Outputs
 rerunJobs: A list of the rerun jobs.
+
 rerunJobsCount: The number of rerun jobs.
 
 ## Usage
