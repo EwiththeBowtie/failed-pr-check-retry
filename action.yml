@@ -1,13 +1,25 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: "Retry Failed PR Checks"
+description: "Retries failed PR checks"
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  max-retries:
+    description: "Maximum number of retries"
     required: true
-    default: '1000'
+    default: "3"
+  repository:
+    description: "Repository to retry checks for"
+    required: true
+  owner:
+    description: "Owner of the repository"
+    required: true
+  token:
+    description: "GitHub token"
+    required: true
 outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  rerunJobs:
+    description: "The jobs that were rerun"
+  rerunJobsCount:
+    description: "The number of jobs that were rerun"
+
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"
