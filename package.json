@@ -27,7 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.0.0",
-    "@octokit/rest": "^18.0.15",
+    "@octokit/rest": "^19.0.8",
     "immutable": "^4.3.0",
     "moment": "^2.29.4"
   },
